@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class AreaSkills extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'content',
-        'date',
-        'user_id',
-        'post_id'
+        'name',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'area_skills_id');
+    }
 }

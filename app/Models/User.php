@@ -19,9 +19,13 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
+        'username', // 'username' => 'required|string|max:255|unique:users',
         'name',
+        'last_name',
         'email',
         'password',
+        'pdf_path',
+        'role',
     ];
 
     /**
@@ -57,6 +61,31 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comments::class, 'user_id');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Posts::class, 'user_id');
+    }
+
+    public function programmingLanguages()
+    {
+        return $this->belongsToMany(ProgrammingLanguages::class, 'user_programming_languages');
+    }
+
+    public function areaSkills()
+    {
+        return $this->belongsToMany(AreaSkills::class, 'user_area_skills');
+    }
+
+    public function softSkills()
+    {
+        return $this->belongsToMany(SoftSkills::class, 'user_soft_skills');
     }
 
 }

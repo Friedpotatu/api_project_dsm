@@ -14,6 +14,17 @@ class PostController extends Controller
      */
     public function index()
     {
+        // Verificar si el usuario está autenticado
+        if (Auth::check()) {
+            // Si está autenticado, obtener todos los posts ordenados por la fecha de creación de manera descendente
+            $posts = Post::latest()->get();
+        } else {
+            // Si no está autenticado, obtener los posts ordenados por 'likes' y 'comentarios' de manera descendente
+            $posts = Post::orderBy('likes', 'desc')->orderBy('comentarios', 'desc')->get();
+        }
+
+        // Puedes devolver los resultados en formato JSON o realizar cualquier otro tratamiento necesario
+        return response()->json(['posts' => $posts]);
     }
 
     /**
