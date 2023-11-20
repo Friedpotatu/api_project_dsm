@@ -38,17 +38,22 @@ class AuthController extends Controller
 
         try {
             //Intentar autenticar al usuario con las credenciales recibidas.
-            if (!$token = JWTAuth::attempt($credentials)) {
+            if (!$tokenCheck = JWTAuth::attempt($credentials)) {
                 return response()->json([
                     'message' => 'las credenciales ingresadas son incorrectas.'
                 ]);
             }
+            $token = $tokenCheck;
+            $user = auth()->user();
         } catch (JWTException $e) {
             return response()->json([
                 'error' => 'token no creado'
             ], 500);
         }
-        return response()->json(compact('token'));
+        return response()->json([
+            'token' => $token,
+            'user' => $user,
+        ]);
     }
     /**
      * Display a listing of the resource.
