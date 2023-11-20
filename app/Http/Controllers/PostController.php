@@ -13,19 +13,27 @@ class PostController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        // Verificar si el usuario está autenticado
-        if (Auth::check()) {
-            // Si está autenticado, obtener todos los posts ordenados por la fecha de creación de manera descendente
-            $posts = Post::latest()->get();
-        } else {
-            // Si no está autenticado, obtener los posts ordenados por 'likes' y 'comentarios' de manera descendente
-            $posts = Post::orderBy('likes', 'desc')->orderBy('comentarios', 'desc')->get();
-        }
+{
+    // Verificar si hay posts en el sistema
+    $postCount = Post::count();
 
-        // Puedes devolver los resultados en formato JSON o realizar cualquier otro tratamiento necesario
-        return response()->json(['posts' => $posts]);
+    if ($postCount === 0) {
+        // Si no hay posts, devolver un mensaje de error
+        return response()->json(['Mensaje' => 'No hay posts en sistema. ¡Sé el primero en publicar!']);
     }
+
+    // Verificar si el usuario está autenticado
+    if (Auth::check()) {
+        // Si está autenticado, obtener todos los posts ordenados por la fecha de creación de manera descendente
+        $posts = Post::latest()->get();
+    } else {
+        // Si no está autenticado, obtener los posts ordenados por 'likes' y 'comentarios' de manera descendente
+        $posts = Post::orderBy('likes', 'desc')->orderBy('comentarios', 'desc')->get();
+    }
+
+    // Devolver los resultados en formato JSON o realizar cualquier otro tratamiento necesario
+    return response()->json(['posts' => $posts]);
+}
 
     /**
      * Store a newly created resource in storage.

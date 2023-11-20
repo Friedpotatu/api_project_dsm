@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('posts', [PostController::class, 'index']);
 
 Route::middleware('jwt.verify')->group(function () {
     Route::get('users', [UserController::class, 'index']);
