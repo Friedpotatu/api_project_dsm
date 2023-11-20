@@ -43,17 +43,46 @@ class AuthController extends Controller
                     'message' => 'las credenciales ingresadas son incorrectas.'
                 ]);
             }
-            $token = $tokenCheck;
-            $user = auth()->user();
+
         } catch (JWTException $e) {
             return response()->json([
                 'error' => 'token no creado'
             ], 500);
         }
+
+        $user = auth()->user();
+
         return response()->json([
-            'token' => $token,
+            'token' => $tokenCheck,
             'user' => $user,
         ]);
+    }
+
+    public function verifyToken()
+    {
+        try {
+            $token = JWTAuth::getToken();
+
+            if(!$token) {
+                return response()->json([
+                    'error', 'Token no proporcionado.'
+                ], 400);
+            }
+
+            // Verificar si el token es valido
+            $user = JWTAuth::parseToken()->authenticate();
+
+            // si el token es válido retornamos una respuesta exitosa
+            return response()->json([
+                'message' => 'Token válido',
+                'user' => $user
+            ]);
+
+
+        } catch (JWTException $e) {
+            // Manejo de excepciones
+            return response()->json(['error' => 'Token inválido'], 401);
+        }
     }
     /**
      * Display a listing of the resource.
