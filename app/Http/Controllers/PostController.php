@@ -46,13 +46,19 @@ class PostController extends Controller
         // Obtenemos al usuario autenticado
         $user = JWTAuth::toUser($token);
 
+        // Procesar la imagen si se ha cargado
+        $pathImage = null;
+        if ($request->hasFile('image')) {
+            $pathImage = $this->uploadImage($request->file('image'));
+        }
+
         // Crear el post
         $post = Post::create([
             'title' => $request->title,
             'description' => $request->description,
-            'pathImage' => $request->pathImage,
-            'likes' => $request->likes,
-            'comments' => $request->comments,
+            'pathImage' => $pathImage,
+            'likes' => 0,
+            'comments' => 0,
             'user_id' => $user->id,
         ]);
 
@@ -60,6 +66,13 @@ class PostController extends Controller
         return response()->json([
             'post' => $post,
         ], 200);
+    }
+
+    private function uploadImage($image)
+    {
+        $path = $image->store('images', 'public'); // Guardar la imagen en storage/public/images
+
+        return $path;
     }
 
     /**
