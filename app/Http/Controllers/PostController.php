@@ -23,12 +23,12 @@ class PostController extends Controller
     }
 
     // Verificar si el usuario está autenticado
-    if (Auth::check()) {
+    if (JWTAuth::check()) {
         // Si está autenticado, obtener todos los posts ordenados por la fecha de creación de manera descendente
         $posts = Post::latest()->get();
     } else {
         // Si no está autenticado, obtener los posts ordenados por 'likes' y 'comentarios' de manera descendente
-        $posts = Post::orderBy('likes', 'desc')->orderBy('comentarios', 'desc')->get();
+        $posts = Post::orderBy('likes', 'desc')->orderBy('comments', 'desc')->get();
     }
 
     // Devolver los resultados en formato JSON o realizar cualquier otro tratamiento necesario
