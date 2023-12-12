@@ -20,6 +20,37 @@ class UserController extends Controller
         ]);
     }
 
+    public function getBlockedUsers()
+    {
+        if(Auth::user()->role != 2){
+            return response()->json([
+                'message' => 'No esta autorizado para realizar esta acción'
+            ]);
+        }
+        $blockedUsers = User::where('role', -1)->get();
+        $totalBlockedUsers = $blockedUsers->count();
+
+        return response()->json([
+            'blocked_users' => $blockedUsers,
+            'total_blocked_users' => $totalBlockedUsers,
+        ]);
+    }
+
+    public function getNonBlockedUsers()
+    {
+        if(Auth::user()->role != 2){
+            return response()->json([
+                'message' => 'No esta autorizado para realizar esta acción'
+            ]);
+        }
+        $nonBlockedUsers = User::where('role','!=', -1)->get();
+        $totalNonBlockedUsers = $nonBlockedUsers->count();
+
+        return response()->json([
+            'non_blocked_users' => $nonBlockedUsers,
+            'total_non_blocked_users' => $totalNonBlockedUsers,
+        ]);
+    }
     /**
      * Store a newly created resource in storage.
      */

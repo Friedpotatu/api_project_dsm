@@ -34,4 +34,8 @@ Route::middleware('jwt.verify')->group(function () {
     Route::post('post', [PostController::class, 'store']);
     Route::get('user/{id}', [UserController::class, 'show']);
     Route::put('user/{id}/block', [UserController::class, 'blockUser']);
+    // Ruta para obtener usuarios bloqueados
+    Route::get('/users/blocked', [UserController::class, 'getBlockedUsers']);
+    // Ruta para obtener usuarios no bloqueados
+    Route::get('/users/non-blocked', [UserController::class, 'getNonBlockedUsers']);
 });
