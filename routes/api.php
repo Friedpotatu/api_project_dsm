@@ -33,4 +33,5 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::post('post', [PostController::class, 'store']);
     Route::get('user/{id}', [UserController::class, 'show']);
+    Route::put('user/{id}/block', [UserController::class, 'blockUser']);
 });

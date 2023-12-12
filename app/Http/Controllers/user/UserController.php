@@ -5,6 +5,7 @@ namespace App\Http\Controllers\user;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -50,5 +51,20 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function blockUser(string $id)
+    {
+        if(Auth::user()->role != 2){
+            return response()->json([
+                'message' => 'No esta autorizado para realizar esta acción'
+            ]);
+        }
+        $user = User::find($id);
+        $user->role = -1;
+        $user->save();
+        return response()->json([
+            'message' => 'Usuario bloqueado', $user
+        ]);
     }
 }
